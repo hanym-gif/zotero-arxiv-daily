@@ -16,6 +16,20 @@ jobs:
         uses: astral-sh/setup-uv@v7.1.4
 
 
+      - name: Check configuration
+        env:
+          ZOTERO_ID: ${{ secrets.ZOTERO_ID }}
+          ZOTERO_KEY: ${{ secrets.ZOTERO_KEY }}
+          SENDER: ${{ secrets.SENDER }}
+          RECEIVER: ${{ secrets.RECEIVER }}
+          SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_API_BASE: ${{ secrets.OPENAI_API_BASE }}
+          CUSTOM_CONFIG: ${{ vars.CUSTOM_CONFIG }}
+        run: |
+          printf "%b\n" "$CUSTOM_CONFIG" > config/custom.yaml
+          uv run src/zotero_arxiv_daily/check_config.py
+
       - name: Run script
         env:
           ZOTERO_ID: ${{ secrets.ZOTERO_ID }}
